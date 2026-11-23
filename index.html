@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIROLINK — Stay precise | Ingénierie BMS/EMS, HVAC & Data Integrity</title>
+    <meta name="description" content="AIROLINK — Ingénierie de précision à Constantine, Algérie. Systèmes BMS/EMS, régulation HVAC critique, Commissioning & Qualification, et Data Integrity (ALCOA+ / 21 CFR Part 11).">
+
+    <!-- Google Fonts: Plus Jakarta Sans, Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['"Plus Jakarta Sans"', 'Inter', '-apple-system', 'sans-serif'],
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    animation: {
+                        'aurora-slow': 'auroraDrift 14s ease-in-out infinite alternate',
+                        'aurora-rev': 'auroraDriftRev 17s ease-in-out infinite alternate',
+                        'pulse-dot': 'pulseDot 2.8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        auroraDrift: {
+                            '0%': { transform: 'translate3d(-3%, -2%, 0) scale(1)' },
+                            '50%': { transform: 'translate3d(3%, 3%, 0) scale(1.06)' },
+                            '100%': { transform: 'translate3d(-1%, 4%, 0) scale(0.98)' },
+                        },
+                        auroraDriftRev: {
+                            '0%': { transform: 'translate3d(3%, 2%, 0) scale(1)' },
+                            '100%': { transform: 'translate3d(-4%, -3%, 0) scale(1.08)' },
+                        },
+                        pulseDot: {
+                            '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+                            '50%': { transform: 'scale(1.35)', opacity: '0.65' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .glass-nav {
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+        }
+
+        .hero-grid {
+            background-size: 48px 48px;
+            background-image:
+                linear-gradient(to right, rgba(30, 24, 19, 0.045) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 24, 19, 0.045) 1px, transparent 1px);
+            mask-image: radial-gradient(ellipse at center, black 38%, transparent 80%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 38%, transparent 80%);
+        }
+
+        .dark .hero-grid {
+            background-image:
+                linear-gradient(to right, rgba(229, 198, 148, 0.055) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(229, 198, 148, 0.055) 1px, transparent 1px);
+        }
+
+        .hero-accent-text {
+            background: linear-gradient(135deg, #231C16 0%, #8C5A3C 58%, #B88352 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dark .hero-accent-text {
+            background: linear-gradient(135deg, #FFFDF9 0%, #E5C694 58%, #C8A46D 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Effet de lueur douce qui suit le curseur sur les cartes */
+        .spotlight-card {
+            position: relative;
+        }
+
+        .spotlight-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(200, 164, 109, 0.14), transparent 65%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .spotlight-card:hover::before {
+            opacity: 1;
+        }
+
+        .bento-card {
+            transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                        border-color 0.3s ease,
+                        box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 50px -20px rgba(35, 28, 22, 0.14);
+        }
+
+        .dark .bento-card:hover {
+            box-shadow: 0 26px 55px -20px rgba(0, 0, 0, 0.55);
+        }
+
+        @keyframes heroReveal {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 22px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .hero-anim-1 { animation: heroReveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.04s both; }
+        .hero-anim-2 { animation: heroReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both; }
+        .hero-anim-3 { animation: heroReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.24s both; }
+        .hero-anim-4 { animation: heroReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.34s both; }
+
+        .reveal {
+            opacity: 0;
+            transform: translate3d(0, 24px, 0);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+
+        .delay-1 { transition-delay: 0.07s; }
+        .delay-2 { transition-delay: 0.14s; }
+        .delay-3 { transition-delay: 0.21s; }
+
+        ::-webkit-scrollbar {
+            width: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(140, 90, 60, 0.28);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(140, 90, 60, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-[#FBF7F0] text-[#1E1813] dark:bg-[#14100C] dark:text-[#F9F4EC] transition-colors duration-300 selection:bg-[#8C5A3C] selection:text-white overflow-x-hidden">
+
+    <!-- Barre de progression de lecture créative en haut de page -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-[2.5px] w-0 z-50 bg-gradient-to-r from-[#8C5A3C] via-[#C8A46D] to-[#231C16] dark:from-[#E5C694] dark:via-[#C8A46D] dark:to-[#FFFDF9] transition-[width] duration-150 pointer-events-none"></div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- =====================================================================
+         1. STICKY NAVBAR (AIROLINK SUR LA 1RE LIGNE / STAY PRECISE EN DESSOUS)
+    ====================================================================== -->
+    <header class="fixed top-0 inset-x-0 z-40 glass-nav bg-[#FFFDF9]/85 dark:bg-[#1B1510]/85 border-b border-[#1E1813]/[0.08] dark:border-[#E5C694]/[0.12] transition-colors duration-300">
+        <div class="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12 h-[72px] flex items-center justify-between gap-4">
+
+            <!-- Brand Logo: AIROLINK puis Stay precise sur une autre ligne -->
+            <a href="#" class="flex items-center gap-3 focus:outline-none group">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1E1813] via-[#5D3923] to-[#B68952] dark:from-[#E5C694] dark:via-[#D5AD6F] dark:to-[#B88346] flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-105 shrink-0">
+                    <svg class="w-5 h-5 text-[#FBF7F0] dark:text-[#14100C]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 12c2.5-3.5 5.5-3.5 8 0s5.5 3.5 8 0 4-3.5 4-3.5"/>
+                        <path d="M2 17c2.5-3.5 5.5-3.5 8 0s5.5 3.5 8 0"/>
+                        <circle cx="19" cy="7" r="1.8" fill="currentColor"/>
+                    </svg>
+                </div>
+                <div class="flex flex-col leading-tight">
+                    <span class="font-display text-lg font-extrabold tracking-tight text-[#1E1813] dark:text-[#FFFDF9]">
+                        AIRO<span class="font-semibold text-[#8C5A3C] dark:text-[#E5C694]">LINK</span>
+                    </span>
+                    <span class="text-[11px] font-medium tracking-[0.08em] text-[#7A6A5C] dark:text-[#C5B4A3]">
+                        Stay precise
+                    </span>
+                </div>
+            </a>
+
+            <!-- Centered Navigation -->
+            <nav class="hidden md:flex items-center gap-8 text-[13px] font-medium text-[#5E5146] dark:text-[#B9A99A]">
+                <a href="#vision" class="hover:text-[#1E1813] dark:hover:text-[#FFFDF9] transition-colors">Vision</a>
+                <a href="#pourquoi-airolink" class="hover:text-[#1E1813] dark:hover:text-[#FFFDF9] transition-colors">Pourquoi AIROLINK</a>
+                <a href="#expertises" class="hover:text-[#1E1813] dark:hover:text-[#FFFDF9] transition-colors">Expertises</a>
+                <a href="#conformite" class="hover:text-[#1E1813] dark:hover:text-[#FFFDF9] transition-colors">Conformité</a>
+                <a href="#contact" class="hover:text-[#1E1813] dark:hover:text-[#FFFDF9] transition-colors">Contact</a>
+            </nav>
+
+            <!-- Right Controls -->
+            <div class="flex items-center gap-2.5">
+                <button id="theme-toggle" type="button" aria-label="Changer de thème" title="Mode clair / Mode nuit" class="w-9 h-9 rounded-lg flex items-center justify-center bg-[#F3E9D8] dark:bg-[#261E17] text-[#4E3624] dark:text-[#E5C694] hover:bg-[#E9DBC3] dark:hover:bg-[#31261E] border border-[#1E1813]/[0.08] dark:border-[#E5C694]/15 transition-colors">
+                    <svg id="icon-sun" class="w-4 h-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <svg id="icon-moon" class="w-4 h-4 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+
+                <a href="#contact" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-xs font-semibold text-[#FFFDF9] dark:text-[#14100C] bg-[#1E1813] dark:bg-[#E5C694] hover:bg-[#352A21] dark:hover:bg-[#F0D5A8] transition-all hover:-translate-y-0.5">
+                    <span>Demander une étude</span>
+                    <svg class="w-3.5 h-3.5 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- =====================================================================
+         2. HERO SECTION (LARGE, CRÉATIF & ARCHITECTURAL)
+    ====================================================================== -->
+    <section id="vision" class="relative pt-36 pb-24 lg:pt-44 lg:pb-32 overflow-hidden">
+        <div class="pointer-events-none absolute inset-0 hero-grid"></div>
+
+        <!-- Halos Aurora fluides -->
+        <div class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[980px] h-[480px] rounded-full bg-gradient-to-tr from-[#E9CFA8]/65 via-[#F5E6CE]/55 to-[#C8A46D]/25 dark:from-[#6E452B]/35 dark:via-[#8C5A3C]/20 dark:to-[#C8A46D]/10 blur-3xl animate-aurora-slow"></div>
+        <div class="pointer-events-none absolute top-28 left-[8%] w-72 h-72 rounded-full bg-[#E5C694]/25 dark:bg-[#8C5A3C]/12 blur-3xl animate-aurora-rev"></div>
+
+        <div class="relative max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12 text-center">
+            <!-- Location Pill -->
+            <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#FFFDF9]/90 dark:bg-[#1D1712]/90 border border-[#1E1813]/10 dark:border-[#E5C694]/20 shadow-sm mb-8 hero-anim-1">
+                <span class="w-2 h-2 rounded-full bg-[#8C5A3C] dark:bg-[#E5C694] animate-pulse-dot"></span>
+                <span class="text-[11px] font-semibold tracking-[0.15em] uppercase text-[#5E5146] dark:text-[#C8B7A6]">
+                    Ingénierie de Précision • Constantine, Algérie
+                </span>
+            </div>
+
+            <!-- Main Headline -->
+            <h1 class="font-display text-4xl sm:text-6xl lg:text-[74px] font-extrabold tracking-[-0.03em] leading-[1.04] max-w-5xl mx-auto hero-anim-2">
+                <span class="text-[#1E1813] dark:text-[#FFFDF9]">AIROLINK.</span>
+                <span class="block sm:inline hero-accent-text"> Stay precise.</span>
+            </h1>
+
+            <!-- Clean Subtitle -->
+            <p class="mt-6 text-base sm:text-lg lg:text-xl text-[#5E5146] dark:text-[#B9A99A] max-w-3xl mx-auto leading-relaxed font-normal hero-anim-3">
+                Conception et intégration de systèmes <strong class="font-semibold text-[#1E1813] dark:text-[#FFFDF9]">BMS/EMS</strong>, régulation <strong class="font-semibold text-[#1E1813] dark:text-[#FFFDF9]">HVAC critique</strong>, commissioning & qualification pharmaceutique et intégrité des données.
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="mt-10 flex flex-wrap items-center justify-center gap-4 hero-anim-4">
+                <a href="#expertises" class="px-7 py-3.5 rounded-lg text-sm font-semibold text-[#FFFDF9] dark:text-[#14100C] bg-[#1E1813] dark:bg-[#E5C694] hover:bg-[#352A21] dark:hover:bg-[#F0D5A8] shadow-md shadow-[#1E1813]/15 transition-all hover:-translate-y-0.5">
+                    Découvrir nos expertises
+                </a>
+                <a href="#contact" class="px-7 py-3.5 rounded-lg text-sm font-semibold text-[#1E1813] dark:text-[#FFFDF9] bg-[#FFFDF9]/90 dark:bg-[#1D1712]/90 hover:bg-[#F3E9D8] dark:hover:bg-[#261E17] border border-[#1E1813]/15 dark:border-[#E5C694]/20 backdrop-blur-md transition-all hover:-translate-y-0.5 flex items-center gap-2">
+                    <span>Contacter le fondateur</span>
+                    <svg class="w-4 h-4 text-[#8C5A3C] dark:text-[#E5C694]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         3. NOUVELLE SECTION : POURQUOI AIROLINK ?
+    ====================================================================== -->
+    <section id="pourquoi-airolink" class="py-16 lg:py-24 bg-[#F4ECE0]/65 dark:bg-[#19140F]/80 border-y border-[#1E1813]/[0.08] dark:border-[#E5C694]/[0.12] transition-colors duration-300">
+        <div class="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
+
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-10 border-b border-[#1E1813]/10 dark:border-[#E5C694]/15 reveal">
+                <div>
+                    <span class="text-xs font-mono font-semibold uppercase tracking-[0.14em] text-[#8C5A3C] dark:text-[#E5C694]">
+                        Valeur Ajoutée & Différenciation
+                    </span>
+                    <h2 class="mt-2 font-display text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-[-0.025em] text-[#1E1813] dark:text-[#FFFDF9]">
+                        Pourquoi choisir AIROLINK ?
+                    </h2>
+                </div>
+                <p class="text-sm sm:text-base text-[#5E5146] dark:text-[#B9A99A] max-w-xl leading-relaxed">
+                    Nous allions rigueur d'automatisme industriel, maîtrise métrologique et architectures locales fiables pour protéger vos environnements sensibles sans dépendance superflue.
+                </p>
+            </div>
+
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+                <!-- Raison 1 -->
+                <div class="spotlight-card bento-card rounded-2xl p-6 sm:p-7 bg-[#FFFDF9] dark:bg-[#1D1712] border border-[#1E1813]/10 dark:border-[#E5C694]/15 flex flex-col justify-between reveal">
+                    <div>
+                        <div class="flex items-center justify-between mb-5">
+                            <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md bg-[#F4E9D7] dark:bg-[#282019] text-[#8C5A3C] dark:text-[#E5C694]">01</span>
+                            <svg class="w-5 h-5 text-[#8C5A3C] dark:text-[#E5C694]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2" />
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-[#1E1813] dark:text-[#FFFDF9]">
+                            Fiabilité Locale & Souveraine
+                        </h3>
+                        <p class="mt-2.5 text-sm text-[#5E5146] dark:text-[#B9A99A] leading-relaxed">
+                            Systèmes pensés pour fonctionner de manière autonome sur votre réseau local avec mémoire tampon embarquée, même en cas d'indisponibilité externe.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-[#1E1813]/[0.07] dark:border-[#E5C694]/10 font-mono text-[11px] text-[#8C5A3C] dark:text-[#E5C694]">
+                        Continuité garantie • Zéro blocage
+                    </div>
+                </div>
+
+                <!-- Raison 2 -->
+                <div class="spotlight-card bento-card rounded-2xl p-6 sm:p-7 bg-[#FFFDF9] dark:bg-[#1D1712] border border-[#1E1813]/10 dark:border-[#E5C694]/15 flex flex-col justify-between reveal delay-1">
+                    <div>
+                        <div class="flex items-center justify-between mb-5">
+                            <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md bg-[#F4E9D7] dark:bg-[#282019] text-[#8C5A3C] dark:text-[#E5C694]">02</span>
+                            <svg class="w-5 h-5 text-[#8C5A3C] dark:text-[#E5C694]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-[#1E1813] dark:text-[#FFFDF9]">
+                            Réglage Fin & Stabilité
+                        </h3>
+                        <p class="mt-2.5 text-sm text-[#5E5146] dark:text-[#B9A99A] leading-relaxed">
+                            Approche orientée terrain : boucles de régulation ajustées avec précision, capteurs raccordés et diagnostics clairs pour éviter les dérives thermiques ou pressions.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-[#1E1813]/[0.07] dark:border-[#E5C694]/10 font-mono text-[11px] text-[#8C5A3C] dark:text-[#E5C694]">
+                        Maîtrise PID • Précision terrain
+                    </div>
+                </div>
+
+                <!-- Raison 3 -->
+                <div class="spotlight-card bento-card rounded-2xl p-6 sm:p-7 bg-[#FFFDF9] dark:bg-[#1D1712] border border-[#1E1813]/10 dark:border-[#E5C694]/15 flex flex-col justify-between reveal delay-2">
+                    <div>
+                        <div class="flex items-center justify-between mb-5">
+                            <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md bg-[#F4E9D7] dark:bg-[#282019] text-[#8C5A3C] dark:text-[#E5C694]">03</span>
+                            <svg class="w-5 h-5 text-[#8C5A3C] dark:text-[#E5C694]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-[#1E1813] dark:text-[#FFFDF9]">
+                            Traçabilité Prête pour l'Audit
+                        </h3>
+                        <p class="mt-2.5 text-sm text-[#5E5146] dark:text-[#B9A99A] leading-relaxed">
+                            Chaque événement, alarme ou modification est horodaté et structuré selon les bonnes pratiques ALCOA+, cGMP et ISO 14644 pour simplifier vos dossiers qualité.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-[#1E1813]/[0.07] dark:border-[#E5C694]/10 font-mono text-[11px] text-[#8C5A3C] dark:text-[#E5C694]">
+                        ALCOA+ • QI/QO/QP • Audit Trail
+                    </div>
+                </div>
+
+                <!-- Raison 4 -->
+                <div class="spotlight-card bento-card rounded-2xl p-6 sm:p-7 bg-[#231C16] dark:bg-[#261D16] text-[#FFFDF9] border border-[#C8A46D]/35 flex flex-col justify-between reveal delay-3">
+                    <div>
+                        <div class="flex items-center justify-between mb-5">
+                            <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md bg-[#FFFDF9]/10 text-[#E5C694]">04</span>
+                            <svg class="w-5 h-5 text-[#E5C694]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-[#FFFDF9]">
+                            Interlocuteur Direct & Réactif
+                        </h3>
+                        <p class="mt-2.5 text-sm text-[#E5D9CA] leading-relaxed">
+                            Un accompagnement technique direct, transparent et réactif depuis Constantine, de l'analyse du besoin jusqu'à la mise en service et au support.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-[#FFFDF9]/15 font-mono text-[11px] text-[#E5C694]">
+                        Suivi direct • Déploiement agile
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         4. BENTO GRID — LES 4 PILIERS D'EXPERTISE
+    ====================================================================== -->
+    <section id="expertises" class="py-16 lg:py-24">
+        <div class="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
+
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-10 border-b border-[#1E1813]/10 dark:border-[#E5C694]/15 reveal">
+                <div>
+                    <span class="text-xs font-mono font-semibold uppercase tracking-[0.14em] text-[#8C5A3C] dark:text-[#E5C694]">
+                        Architecture & Savoir-Faire
+                    </span>
+                    <h2 class="mt-2 font-display text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-[-0.025em] text-[#1E1813] dark:text-[#FFFDF9]">
+                        Quatre piliers d'ingénierie critique.
+                    </h2>
+                </div>
+                <p class="text-sm text-[#6E6054] dark:text-[#B9A99A] max-w-md">
+                    Des solutions conçues pour les environnements pharmaceutiques, laboratoires et installations industrielles exigeantes.
+                </p>
+            </div>
+
+            <!-- Structured 12-Col Bento Grid -->
+            <div class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+                <!-- PILIER 1: BMS / EMS Systems (7 cols) -->
+                <div class="lg:col-span-7 spotlight-card bento-card rounded-2xl p-7 sm:p-8 bg-[#FFFDF9] dark:bg-[#1D1712] border border-[#1E1813]/10 dark:border-[#E5C694]/15 hover:border-[#8C5A3C]/40 dark:hover:border-[#E5C694]/35 flex flex-col justify-between reveal">
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-10 h-10 rounded-xl bg-[#F4E9D7] dark:bg-[#282019] border border-[#C8A46D]/35 flex items-center justify-center text-[#8C5A3C] dark:text-[#E5C694]">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
+                            </div>
+                            <span class="text-xs font-mono font-medium text-[#8C5A3C] dark:text-[#E5C694]">01 / SUPERVISION</span>
+                        </div>
+
+                        <h3 class="font-display text-2xl font-bold tracking-tight text-[#1E1813] dark:text-[#FFFDF9]">
+                            BMS / EMS Systems
+                        </h3>
+                        <p class="mt-3 text-sm text-[#5E5146] dark:text-[#B9A99A] leading-relaxed">
+                            Conception et déploiement de systèmes de gestion technique du bâtiment (BMS) et de monitoring environnemental continu (EMS) pour salles propres, zones de stockage et laboratoires.
+                        </p>
+                    </div>
+
+                    <div class="relative z-10 mt-7 pt-5 border-t border-[#1E1813]/[0.08] dark:border-[#E5C694]/10 grid grid-cols-3 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-[#FBF7F0] dark:bg-[#15110D] border border-[#1E1813]/[0.06] dark:border-[#E5C694]/10">
+                            <div class="font-semibold text-[#1E1813] dark:text-[#FFFDF9]">Capteurs</div>
+                            <div class="text-[#6E6054] dark:text-[#A89889] mt-0.5">T°, HR%, ΔP, Particules</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-[#FBF7F0] dark:bg-[#15110D] border border-[#1E1813]/[0.06] dark:border-[#E5C694]/10">
+                            <div class="font-semibold text-[#1E1813] dark:text-[#FFFDF9]">Protocoles</div>
+                            <div class="text-[#6E6054] dark:text-[#A89889] mt-0.5">Modbus, BACnet, OPC UA</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-[#FBF7F0] dark:bg-[#15110D] border border-[#1E1813]/[0.06] dark:border-[#E5C694]/10">
+                            <div class="font-semibold text-[#1E1813] dark:text-[#FFFDF9]">Alertes</div>
+                            <div class="text-[#6E6054] dark:text-[#A89889] mt-0.5">SMS, Email, Redondance</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PILIER 2: HVAC Regulation (5 cols) -->
+                <div class="lg:col-span-5 spotlight-card bento-card rounded-2xl p-7 sm:p-8 bg-[#231C16] dark:bg-[#261D16] text-[#FFFDF9] border border-[#C8A46D]/30 hover:border-[#E5C694]/60 flex flex-col justify-between reveal delay-1">
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-10 h-10 rounded-xl bg-[#FFFDF9]/10 border border-[#E5C694]/25 flex items-center justify-center text-[#E5C694]">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                                </svg>
+                            </div>
+                            <span class="text-xs font-mono font-medium text-[#E5C694]">02 / AÉRAULIQUE</span>
+                        </div>
+
+                        <h3 class="font-display text-2xl font-bold tracking-tight text-[#FFFDF9]">
+                            HVAC Regulation
+                        </h3>
+                        <p class="mt-3 text-sm text-[#E5D9CA] leading-relaxed">
+                            Régulation PID haute stabilité des centrales de traitement d'air (CTA). Maîtrise des cascades de pression, des débits d'air neuf et de la performance énergétique.
+                        </p>
+                    </div>
+
+                    <div class="relative z-10 mt-7 pt-5 border-t border-[#FFFDF9]/15 flex items-center justify-between text-xs">
+                        <span class="text-[#D4C4B2]">Automates PLC & Variateurs</span>
+                        <span class="px-2.5 py-1 rounded-md bg-[#E5C694]/15 border border-[#E5C694]/30 font-mono font-semibold text-[#F3D9AD]">±0.1°C</span>
+                    </div>
+                </div>
+
+                <!-- PILIER 3: Commissioning / Qualification (5 cols) -->
+                <div class="lg:col-span-5 spotlight-card bento-card rounded-2xl p-7 sm:p-8 bg-[#FFFDF9] dark:bg-[#1D1712] border border-[#1E1813]/10 dark:border-[#E5C694]/15 hover:border-[#8C5A3C]/40 dark:hover:border-[#E5C694]/35 flex flex-col justify-between reveal delay-1">
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-10 h-10 rounded-xl bg-[#F4E9D7] dark:bg-[#282019] border border-[#C8A46D]/35 flex items-center justify-center text-[#8C5A3C] dark:text-[#E5C694]">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <span class="text-xs font-mono font-medium text-[#8C5A3C] dark:text-[#E5C694]">03 / VALIDATION</span>
+                        </div>
+
+                        <h3 class="font-display text-2xl font-bold tracking-tight text-[#1E1813] dark:text-[#FFFDF9]">
+                            Commissioning & Qualification
+                        </h3>
+                        <p class="mt-3 text-sm text-[#5E5146] dark:text-[#B9A99A] leading-relaxed">
+                            Accompagnement complet de la mise en service à la qualification réglementaire : protocoles FAT, SAT, QI, QO et QP (IQ/OQ/PQ) selon cGMP et ISO 14644.
+                        </p>
+                    </div>
+
+                    <div class="relative z-10 mt-7 pt-5 border-t border-[#1E1813]/[0.08] dark:border-[#E5C694]/10 flex flex-wrap gap-2">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-medium bg-[#F3E9D8] dark:bg-[#282019] text-[#4E3624] dark:text-[#E5C694]">FAT / SAT</span>
+                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-medium bg-[#F3E9D8] dark:bg-[#282019] text-[#4E3624] dark:text-[#E5C694]">QI / QO / QP</span>
+                        <span class="px-2.5 py-1 rounded-md text-xs font-mono font-medium bg-[#F3E9D8] dark:bg-[#282019] text-[#4E3624] dark:text-[#E5C694]">Cartographie T°/HR</span>
+                    </div>
+                </div>
+
+                <!-- PILIER 4: Data Integrity (7 cols) -->
+                <div class="lg:col-span-7 spotlight-card bento-card rounded-2xl p-7 sm:p-8 bg-[#FFFDF9] dark:bg-[#1D1712] border border-[#1E1813]/10 dark:border-[#E5C694]/15 hover:border-[#8C5A3C]/40 dark:hover:border-[#E5C694]/35 flex flex-col justify-between reveal delay-2">
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-10 h-10 rounded-xl bg-[#F4E9D7] dark:bg-[#282019] border border-[#C8A46D]/35 flex items-center justify-center text-[#8C5A3C] dark:text-[#E5C694]">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                            </div>
+                            <span class="text-xs font-mono font-medium text-[#8C5A3C] dark:text-[#E5C694]">04 / TRAÇABILITÉ</span>
+                        </div>
+
+                        <h3 class="font-display text-2xl font-bold tracking-tight text-[#1E1813] dark:text-[#FFFDF9]">
+                            Data Integrity
+                        </h3>
+                        <p class="mt-3 text-sm text-[#5E5146] dark:text-[#B9A99A] leading-relaxed">
+                            Protection native de chaque donnée critique dès son acquisition. Architecture conforme aux exigences <strong class="font-semibold text-[#1E1813] dark:text-[#FFFDF9]">FDA 21 CFR Part 11</strong>, <strong class="font-semibold text-[#1E1813] dark:text-[#FFFDF9]">EU GMP Annexe 11</strong> et aux principes <strong class="font-semibold text-[#1E1813] dark:text-[#FFFDF9]">ALCOA+</strong>.
+                        </p>
+                    </div>
+
+                    <div class="relative z-10 mt-7 pt-5 border-t border-[#1E1813]/[0.08] dark:border-[#E5C694]/10 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-[#FBF7F0] dark:bg-[#15110D] border border-[#1E1813]/[0.06] dark:border-[#E5C694]/10">
+                            <div class="font-semibold text-[#1E1813] dark:text-[#FFFDF9]">Audit Trail</div>
+                            <div class="text-[#6E6054] dark:text-[#A89889] mt-0.5">Infalsifiable</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-[#FBF7F0] dark:bg-[#15110D] border border-[#1E1813]/[0.06] dark:border-[#E5C694]/10">
+                            <div class="font-semibold text-[#1E1813] dark:text-[#FFFDF9]">Signatures</div>
+                            <div class="text-[#6E6054] dark:text-[#A89889] mt-0.5">Électroniques</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-[#FBF7F0] dark:bg-[#15110D] border border-[#1E1813]/[0.06] dark:border-[#E5C694]/10">
+                            <div class="font-semibold text-[#1E1813] dark:text-[#FFFDF9]">Accès RBAC</div>
+                            <div class="text-[#6E6054] dark:text-[#A89889] mt-0.5">Multi-niveaux</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-[#FBF7F0] dark:bg-[#15110D] border border-[#1E1813]/[0.06] dark:border-[#E5C694]/10">
+                            <div class="font-semibold text-[#1E1813] dark:text-[#FFFDF9]">Archivage</div>
+                            <div class="text-[#6E6054] dark:text-[#A89889] mt-0.5">Chiffré & Pérenne</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         5. METRICS & REGULATORY STANDARDS EXPLORER
+    ====================================================================== -->
+    <section id="conformite" class="py-16 lg:py-24 bg-[#F4ECE0]/75 dark:bg-[#19140F] border-y border-[#1E1813]/[0.08] dark:border-[#E5C694]/[0.12] transition-colors duration-300">
+        <div class="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
+
+            <!-- 4 KPI Cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 pb-14 border-b border-[#1E1813]/10 dark:border-[#E5C694]/15 reveal">
+                <div class="bento-card p-5 sm:p-6 rounded-2xl bg-[#FFFDF9] dark:bg-[#1D1712] border border-[#1E1813]/10 dark:border-[#E5C694]/15">
+                    <div class="text-2xl sm:text-3xl font-bold text-[#8C5A3C] dark:text-[#E5C694] font-mono">±0.1°C</div>
+                    <div class="mt-2 text-sm font-semibold text-[#1E1813] dark:text-[#FFFDF9]">Précision Métrologique</div>
+                    <div class="mt-1 text-xs text-[#6E6054] dark:text-[#A89889]">Chaîne de mesure raccordée</div>
+                </div>
+                <div class="bento-card p-5 sm:p-6 rounded-2xl bg-[#FFFDF9] dark:bg-[#1D1712] border border-[#1E1813]/10 dark:border-[#E5C694]/15">
+                    <div class="text-2xl sm:text-3xl font-bold text-[#8C5A3C] dark:text-[#E5C694] font-mono">99.99%</div>
+                    <div class="mt-2 text-sm font-semibold text-[#1E1813] dark:text-[#FFFDF9]">Disponibilité Système</div>
+                    <div class="mt-1 text-xs text-[#6E6054] dark:text-[#A89889]">Architecture redondante</div>
+                </div>
+                <div class="bento-card p-5 sm:p-6 rounded-2xl bg-[#FFFDF9] dark:bg-[#1D1712] border border-[#1E1813]/10 dark:border-[#E5C694]/15">
+                    <div class="text-2xl sm:text-3xl font-bold text-[#8C5A3C] dark:text-[#E5C694] font-mono">100%</div>
+                    <div class="mt-2 text-sm font-semibold text-[#1E1813] dark:text-[#FFFDF9]">Conformité ALCOA+</div>
+                    <div class="mt-1 text-xs text-[#6E6054] dark:text-[#A89889]">Intégrité native des relevés</div>
+                </div>
+                <div class="bento-card p-5 sm:p-6 rounded-2xl bg-[#FFFDF9] dark:bg-[#1D1712] border border-[#1E1813]/10 dark:border-[#E5C694]/15">
+                    <div class="text-2xl sm:text-3xl font-bold text-[#8C5A3C] dark:text-[#E5C694] font-mono">24/7</div>
+                    <div class="mt-2 text-sm font-semibold text-[#1E1813] dark:text-[#FFFDF9]">Surveillance Continue</div>
+                    <div class="mt-1 text-xs text-[#6E6054] dark:text-[#A89889]">Acquittement & escalade</div>
+                </div>
+            </div>
+
+            <!-- Interactive Compliance Explorer -->
+            <div class="mt-14 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start reveal">
+                <div class="lg:col-span-5">
+                    <span class="text-xs font-mono font-semibold uppercase tracking-[0.14em] text-[#8C5A3C] dark:text-[#E5C694]">
+                        Référentiels Réglementaires
+                    </span>
+                    <h3 class="mt-2 font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1E1813] dark:text-[#FFFDF9]">
+                        Conçu pour réussir vos audits les plus exigeants.
+                    </h3>
+                    <p class="mt-3 text-sm text-[#5E5146] dark:text-[#B9A99A] leading-relaxed">
+                        Sélectionnez un référentiel pour consulter la réponse technique et documentaire intégrée par AIROLINK.
+                    </p>
+
+                    <div class="mt-6 flex flex-col gap-2">
+                        <button onclick="selectStandard('alcoa')" id="std-alcoa" type="button" class="std-btn text-left px-4 py-3.5 rounded-xl border transition-all bg-[#1E1813] text-[#FFFDF9] border-[#1E1813] dark:bg-[#E5C694] dark:text-[#14100C] dark:border-[#E5C694] font-semibold text-xs sm:text-sm flex items-center justify-between">
+                            <span>Principes ALCOA+ (Data Integrity)</span>
+                            <span>→</span>
+                        </button>
+                        <button onclick="selectStandard('cfr')" id="std-cfr" type="button" class="std-btn text-left px-4 py-3.5 rounded-xl border transition-all bg-[#FFFDF9] text-[#1E1813] border-[#1E1813]/10 dark:bg-[#1D1712] dark:text-[#F9F4EC] dark:border-[#E5C694]/15 hover:border-[#8C5A3C]/45 font-semibold text-xs sm:text-sm flex items-center justify-between">
+                            <span>FDA 21 CFR Part 11 & EU GMP Annexe 11</span>
+                            <span>→</span>
+                        </button>
+                        <button onclick="selectStandard('iso')" id="std-iso" type="button" class="std-btn text-left px-4 py-3.5 rounded-xl border transition-all bg-[#FFFDF9] text-[#1E1813] border-[#1E1813]/10 dark:bg-[#1D1712] dark:text-[#F9F4EC] dark:border-[#E5C694]/15 hover:border-[#8C5A3C]/45 font-semibold text-xs sm:text-sm flex items-center justify-between">
+                            <span>ISO 14644-1 / -2 (Salles Propres)</span>
+                            <span>→</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7">
+                    <div id="standard-detail-card" class="p-7 sm:p-8 rounded-2xl bg-[#FFFDF9] dark:bg-[#1D1712] border border-[#1E1813]/10 dark:border-[#E5C694]/15 transition-opacity duration-200">
+                        <div class="flex items-center justify-between gap-4 pb-5 border-b border-[#1E1813]/[0.08] dark:border-[#E5C694]/15">
+                            <div>
+                                <span id="std-badge" class="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#8C5A3C] dark:text-[#E5C694]">INTÉGRITÉ DES DONNÉES</span>
+                                <h4 id="std-title" class="font-display text-xl sm:text-2xl font-bold text-[#1E1813] dark:text-[#FFFDF9] mt-1">Architecture Native ALCOA+</h4>
+                            </div>
+                            <span class="px-3 py-1.5 rounded-lg bg-[#F4E9D7] dark:bg-[#282019] border border-[#C8A46D]/35 text-[#8C5A3C] dark:text-[#E5C694] font-mono font-semibold text-xs">
+                                100% Conforme
+                            </span>
+                        </div>
+                        <p id="std-desc" class="mt-5 text-[#5E5146] dark:text-[#B9A99A] leading-relaxed text-sm">
+                            Toutes les mesures environnementales acquises par AIROLINK sont attribuables à un capteur unique étalonné, lisibles en temps réel et archivées de manière contemporaine avec synchronisation NTP sécurisée.
+                        </p>
+                        <ul id="std-points" class="mt-5 space-y-3 text-sm text-[#1E1813] dark:text-[#F9F4EC]">
+                            <li class="flex items-start gap-2.5">
+                                <span class="text-[#2E6F40] dark:text-[#6EE7A0] font-bold">✓</span>
+                                <span>Mémoire tampon locale anti-coupure réseau avec resynchronisation automatique sans perte.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <span class="text-[#2E6F40] dark:text-[#6EE7A0] font-bold">✓</span>
+                                <span>Hash cryptographique SHA-256 garantissant l'immuabilité des historiques de lots.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <span class="text-[#2E6F40] dark:text-[#6EE7A0] font-bold">✓</span>
+                                <span>Exportation automatisée de rapports PDF signés électroniquement prêts pour l'assurance qualité.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         6. FONDATEUR & CONTACT SECTION
+    ====================================================================== -->
+    <section id="contact" class="py-16 lg:py-24">
+        <div class="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
+
+            <div class="pb-10 border-b border-[#1E1813]/10 dark:border-[#E5C694]/15 reveal">
+                <span class="text-xs font-mono font-semibold uppercase tracking-[0.14em] text-[#8C5A3C] dark:text-[#E5C694]">
+                    Direction & Contact Direct
+                </span>
+                <h2 class="mt-2 font-display text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-[-0.025em] text-[#1E1813] dark:text-[#FFFDF9]">
+                    Discutons de votre projet critique.
+                </h2>
+            </div>
+
+            <div class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch reveal">
+
+                <!-- Executive Digital Card (6 cols) -->
+                <div class="lg:col-span-6 spotlight-card bento-card rounded-2xl p-7 sm:p-8 bg-[#231C16] dark:bg-[#221A13] text-[#FFFDF9] border border-[#C8A46D]/30 flex flex-col justify-between relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-col leading-tight">
+                                <span class="font-display text-xl font-extrabold tracking-tight">
+                                    AIRO<span class="font-semibold text-[#E5C694]">LINK</span>
+                                </span>
+                                <span class="text-[11px] font-medium tracking-[0.08em] text-[#E5C694]/90">
+                                    Stay precise
+                                </span>
+                            </div>
+                            <span class="px-3 py-1 rounded-md text-[11px] font-mono bg-[#FFFDF9]/10 border border-[#E5C694]/25 text-[#F3D9AD]">
+                                Ingénierie & Automation
+                            </span>
+                        </div>
+
+                        <div class="mt-9 pt-7 border-t border-[#FFFDF9]/12">
+                            <h3 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#FFFDF9]">
+                                Abderrahmane Chaoui
+                            </h3>
+                            <p class="mt-1 text-sm font-medium text-[#E5C694]">
+                                Founder
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Direct Contact Rows -->
+                    <div class="relative z-10 mt-8 space-y-2.5">
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-[#FFFDF9]/[0.07] hover:bg-[#FFFDF9]/[0.11] border border-[#FFFDF9]/10 transition-colors">
+                            <a href="tel:+213657699272" class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-lg bg-[#FBF7F0] text-[#1E1813] flex items-center justify-center shrink-0">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] font-mono uppercase tracking-wider text-[#D4C4B2]">Téléphone Direct</div>
+                                    <div class="text-sm font-semibold font-mono text-[#FFFDF9]">+213 657699272</div>
+                                </div>
+                            </a>
+                            <button onclick="copyText('+213 657699272', 'Numéro de téléphone')" type="button" class="px-2.5 py-1 rounded-md bg-[#FFFDF9]/10 hover:bg-[#FFFDF9]/20 text-[11px] font-medium transition-colors">
+                                Copier
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-[#FFFDF9]/[0.07] hover:bg-[#FFFDF9]/[0.11] border border-[#FFFDF9]/10 transition-colors">
+                            <a href="mailto:Airolink@outlook.fr" class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-lg bg-[#FBF7F0] text-[#1E1813] flex items-center justify-center shrink-0">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] font-mono uppercase tracking-wider text-[#D4C4B2]">Email Professionnel</div>
+                                    <div class="text-sm font-semibold text-[#FFFDF9]">Airolink@outlook.fr</div>
+                                </div>
+                            </a>
+                            <button onclick="copyText('Airolink@outlook.fr', 'Adresse email')" type="button" class="px-2.5 py-1 rounded-md bg-[#FFFDF9]/10 hover:bg-[#FFFDF9]/20 text-[11px] font-medium transition-colors">
+                                Copier
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-[#FFFDF9]/[0.07] border border-[#FFFDF9]/10">
+                            <div class="w-9 h-9 rounded-lg bg-[#FBF7F0] text-[#1E1813] flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-mono uppercase tracking-wider text-[#D4C4B2]">Localisation</div>
+                                <div class="text-sm font-semibold text-[#FFFDF9]">Based in Constantine, Algeria</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Consultation Form (6 cols) -->
+                <div class="lg:col-span-6 spotlight-card rounded-2xl p-7 sm:p-8 bg-[#FFFDF9] dark:bg-[#1D1712] border border-[#1E1813]/10 dark:border-[#E5C694]/15">
+                    <div class="relative z-10">
+                        <h3 class="font-display text-2xl font-bold tracking-tight text-[#1E1813] dark:text-[#FFFDF9]">
+                            Planifier une étude technique
+                        </h3>
+                        <p class="mt-1.5 text-sm text-[#6E6054] dark:text-[#B9A99A]">
+                            Précisez votre besoin d'ingénierie. Réponse sous 24h ouvrées.
+                        </p>
+
+                        <form action="https://formspree.io/f/mgakadbl" method="POST" class="mt-6 space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-[#1E1813] dark:text-[#F9F4EC] mb-1.5">Nom & Prénom *</label>
+                                    <input type="text" name="nom" required placeholder="Dr. Karim Benali" class="w-full px-3.5 py-2.5 rounded-lg bg-[#FBF7F0] dark:bg-[#14100C] border border-[#1E1813]/15 dark:border-[#E5C694]/20 text-sm text-[#1E1813] dark:text-[#FFFDF9] placeholder-[#9B8D7F] focus:outline-none focus:border-[#8C5A3C] dark:focus:border-[#E5C694] transition-colors">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-[#1E1813] dark:text-[#F9F4EC] mb-1.5">Société / Laboratoire *</label>
+                                    <input type="text" name="societe" required placeholder="Laboratoire Pharmaceutique..." class="w-full px-3.5 py-2.5 rounded-lg bg-[#FBF7F0] dark:bg-[#14100C] border border-[#1E1813]/15 dark:border-[#E5C694]/20 text-sm text-[#1E1813] dark:text-[#FFFDF9] placeholder-[#9B8D7F] focus:outline-none focus:border-[#8C5A3C] dark:focus:border-[#E5C694] transition-colors">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-[#1E1813] dark:text-[#F9F4EC] mb-1.5">Email professionnel *</label>
+                                    <input type="email" name="email" required placeholder="contact@entreprise.dz" class="w-full px-3.5 py-2.5 rounded-lg bg-[#FBF7F0] dark:bg-[#14100C] border border-[#1E1813]/15 dark:border-[#E5C694]/20 text-sm text-[#1E1813] dark:text-[#FFFDF9] placeholder-[#9B8D7F] focus:outline-none focus:border-[#8C5A3C] dark:focus:border-[#E5C694] transition-colors">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-[#1E1813] dark:text-[#F9F4EC] mb-1.5">Domaine d'expertise</label>
+                                    <select name="domaine" class="w-full px-3.5 py-2.5 rounded-lg bg-[#FBF7F0] dark:bg-[#14100C] border border-[#1E1813]/15 dark:border-[#E5C694]/20 text-sm text-[#1E1813] dark:text-[#FFFDF9] focus:outline-none focus:border-[#8C5A3C] dark:focus:border-[#E5C694] transition-colors">
+                                        <option value="BMS/EMS">BMS / EMS Systems</option>
+                                        <option value="HVAC">HVAC Regulation</option>
+                                        <option value="Qualification">Commissioning / Qualification (QI/QO)</option>
+                                        <option value="DataIntegrity">Data Integrity (ALCOA+ / 21 CFR Part 11)</option>
+                                        <option value="Global">Projet Clé en Main Complet</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-[#1E1813] dark:text-[#F9F4EC] mb-1.5">Détails du projet (Zones, normes, délais)</label>
+                                <textarea name="message" rows="3" required placeholder="Décrivez brièvement vos installations (salles propres, centrales de traitement d'air, supervision EMS...)" class="w-full px-3.5 py-2.5 rounded-lg bg-[#FBF7F0] dark:bg-[#14100C] border border-[#1E1813]/15 dark:border-[#E5C694]/20 text-sm text-[#1E1813] dark:text-[#FFFDF9] placeholder-[#9B8D7F] focus:outline-none focus:border-[#8C5A3C] dark:focus:border-[#E5C694] transition-colors"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-3 px-5 rounded-lg text-sm font-semibold text-[#FFFDF9] dark:text-[#14100C] bg-[#1E1813] dark:bg-[#E5C694] hover:bg-[#352A21] dark:hover:bg-[#F0D5A8] transition-all hover:-translate-y-0.5">
+                                Transmettre la demande à AIROLINK
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         7. MINIMALIST FOOTER
+    ====================================================================== -->
+    <footer class="py-8 border-t border-[#1E1813]/[0.08] dark:border-[#E5C694]/[0.12] bg-[#FBF7F0] dark:bg-[#14100C] text-xs text-[#6E6054] dark:text-[#A89889] transition-colors duration-300">
+        <div class="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="font-display text-sm font-extrabold text-[#1E1813] dark:text-[#FFFDF9]">AIRO<span class="font-semibold text-[#8C5A3C] dark:text-[#E5C694]">LINK</span></span>
+                <span>—</span>
+                <span class="font-medium text-[#8C5A3C] dark:text-[#E5C694]">Stay precise.</span>
+            </div>
+            <div>
+                © 2026 AIROLINK — Abderrahmane Chaoui • Constantine, Algérie. Tous droits réservés.
+            </div>
+        </div>
+    </footer>
+
+    <!-- =====================================================================
+         INTERACTIVE JAVASCRIPT
+    ====================================================================== -->
+    <script>
+        let activeStandardKey = 'alcoa';
+
+        // 1. Scroll Progress Bar
+        const progressBar = document.getElementById('scroll-progress');
+        window.addEventListener('scroll', () => {
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+            progressBar.style.width = `${Math.min(100, Math.max(0, scrolled))}%`;
+        }, { passive: true });
+
+        // 2. Spotlight Cursor Glow on Cards
+        document.querySelectorAll('.spotlight-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mx', `${x}px`);
+                card.style.setProperty('--my', `${y}px`);
+            });
+        });
+
+        // 3. Light (Vanilla Latte) <-> Night (Mocha) Toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlEl = document.documentElement;
+
+        themeToggleBtn.addEventListener('click', () => {
+            htmlEl.classList.toggle('dark');
+            const isDark = htmlEl.classList.contains('dark');
+            syncStandardButtonsTheme(isDark);
+            showToast(isDark ? 'Mode nuit activé' : 'Mode clair activé');
+        });
+
+        // 4. Toast Notification Helper
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'pointer-events-auto flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-[#1E1813] dark:bg-[#FFFDF9] text-[#FFFDF9] dark:text-[#1E1813] border border-[#C8A46D]/35 text-xs font-medium shadow-xl transform transition-all duration-300 translate-y-2 opacity-0';
+            toast.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-[#E5C694] dark:bg-[#8C5A3C]"></span><span>${message}</span>`;
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 2800);
+        }
+
+        // 5. Copy to Clipboard
+        function copyText(text, label) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                showToast(`${label} copié : ${text}`);
+            } catch (err) {
+                showToast(`Copie impossible`);
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        // 6. Interactive Compliance Standards Switcher
+        const standardsData = {
+            alcoa: {
+                badge: "INTÉGRITÉ DES DONNÉES",
+                title: "Architecture Native ALCOA+",
+                desc: "Toutes les mesures environnementales acquises par AIROLINK sont attribuables à un capteur unique étalonné, lisibles en temps réel et archivées de manière contemporaine avec synchronisation NTP sécurisée.",
+                points: [
+                    "Mémoire tampon locale anti-coupure réseau avec resynchronisation automatique sans perte.",
+                    "Hash cryptographique SHA-256 garantissant l'immuabilité des historiques de lots.",
+                    "Exportation automatisée de rapports PDF signés électroniquement prêts pour l'assurance qualité."
+                ]
+            },
+            cfr: {
+                badge: "CONFORMITÉ LOGICIELLE & SCADA",
+                title: "FDA 21 CFR Part 11 & EU GMP Annexe 11",
+                desc: "Nos interfaces de supervision BMS/EMS intègrent nativement la gestion fine des privilèges utilisateurs, les signatures électroniques à double authentification et la traçabilité complète des actions opérateurs.",
+                points: [
+                    "Piste d'audit (Audit Trail) complète enregistrant chaque modification de consigne (Qui, Quoi, Quand, Pourquoi).",
+                    "Politique stricte de mots de passe, verrouillage automatique et contrôle d'accès par rôles (RBAC).",
+                    "Documentation de validation logicielle GAMP 5 fournie lors de la qualification."
+                ]
+            },
+            iso: {
+                badge: "ENVIRONNEMENTS MAÎTRISÉS",
+                title: "ISO 14644-1 / -2 & Bonnes Pratiques cGMP",
+                desc: "De la régulation aéraulique des centrales de traitement d'air jusqu'aux tests de qualification QI/QO/QP, nous garantissons le maintien des classes particulaires et des cascades de pression.",
+                points: [
+                    "Régulation PID précise des débits d'air, taux de renouvellement horaire et cascades de pression.",
+                    "Étalonnage métrologique raccordé et calcul d'incertitudes sur chaque boucle critique.",
+                    "Protocoles complets de cartographie thermique et tests de récupération (Recovery Test)."
+                ]
+            }
+        };
+
+        function syncStandardButtonsTheme(isDark) {
+            document.querySelectorAll('.std-btn').forEach(btn => {
+                const isSelected = btn.id === `std-${activeStandardKey}`;
+                btn.className = 'std-btn text-left px-4 py-3.5 rounded-xl border transition-all font-semibold text-xs sm:text-sm flex items-center justify-between';
+
+                if (isSelected) {
+                    if (isDark) {
+                        btn.classList.add('bg-[#E5C694]', 'text-[#14100C]', 'border-[#E5C694]');
+                    } else {
+                        btn.classList.add('bg-[#1E1813]', 'text-[#FFFDF9]', 'border-[#1E1813]');
+                    }
+                } else {
+                    if (isDark) {
+                        btn.classList.add('bg-[#1D1712]', 'text-[#F9F4EC]', 'border-[#E5C694]/15', 'hover:border-[#E5C694]/40');
+                    } else {
+                        btn.classList.add('bg-[#FFFDF9]', 'text-[#1E1813]', 'border-[#1E1813]/10', 'hover:border-[#8C5A3C]/45');
+                    }
+                }
+            });
+        }
+
+        function selectStandard(key) {
+            activeStandardKey = key;
+            const item = standardsData[key];
+            const card = document.getElementById('standard-detail-card');
+            syncStandardButtonsTheme(htmlEl.classList.contains('dark'));
+
+            card.style.opacity = '0.35';
+            setTimeout(() => {
+                document.getElementById('std-badge').textContent = item.badge;
+                document.getElementById('std-title').textContent = item.title;
+                document.getElementById('std-desc').textContent = item.desc;
+                document.getElementById('std-points').innerHTML = item.points.map(p => `
+                    <li class="flex items-start gap-2.5">
+                        <span class="text-[#2E6F40] dark:text-[#6EE7A0] font-bold">✓</span>
+                        <span>${p}</span>
+                    </li>
+                `).join('');
+                card.style.opacity = '1';
+            }, 130);
+        }
+
+        // 7. Smooth Scroll Reveal Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.08 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
